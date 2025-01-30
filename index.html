@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Server Stats</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    #stats {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f5f5f5;
+      display: inline-block;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time Discord Server Stats</h1>
+  <div id="stats">Fetching server stats...</div>
+
+  <script>
+    const guildId = 911573283005141053; // Replace with the actual server (guild) ID
+    const widgetUrl = `https://discord.com/api/guilds/${guildId}/widget.json`;
+
+    async function fetchServerStats() {
+      try {
+        const response = await fetch(widgetUrl);
+        if (!response.ok) throw new Error('Failed to fetch server data');
+        const data = await response.json();
+
+        document.getElementById('stats').innerHTML = `
+          <h2>${data.name}</h2>
+          <p><strong>Online Members:</strong> ${data.presence_count}</p>
+          <p><strong>Total Members:</strong> ${data.members.length}</p>
+        `;
+      } catch (error) {
+        document.getElementById('stats').textContent = 'Error fetching server stats.';
+        console.error(error);
+      }
+    }
+
+    // Fetch stats every 10 seconds
+    fetchServerStats();
+    setInterval(fetchServerStats, 10000);
+  </script>
+</body>
+</html>
